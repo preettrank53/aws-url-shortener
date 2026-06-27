@@ -1,12 +1,12 @@
 # AWS URL Shortener
 
-![Python](https://img.shields.io/badge/Python-3.11-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-green) ![LangGraph](https://img.shields.io/badge/LangGraph-purple) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-blue) ![Qdrant](https://img.shields.io/badge/Qdrant-red) ![License](https://img.shields.io/badge/License-MIT-yellow) ![Status](https://img.shields.io/badge/Status-Active%20Development-orange)
+![Python](https://img.shields.io/badge/Python-3.11-blue) ![FastAPI](https://img.shields.io/badge/FastAPI-green) ![AWS](https://img.shields.io/badge/AWS-FF9900?logo=amazon-aws&logoColor=white) ![DynamoDB](https://img.shields.io/badge/DynamoDB-4053D6?logo=amazondynamodb&logoColor=white) ![License](https://img.shields.io/badge/License-MIT-yellow) ![Status](https://img.shields.io/badge/Status-Active%20Development-orange)
 
 A production-ready URL Shortener built entirely on AWS, demonstrating scalable cloud architecture.
 
 ## Overview
 
-This repository contains a high-performance, production-ready URL Shortener designed to leverage native AWS services for maximum scale, resilience, and minimal latency. The application is built using FastAPI on Python 3.11 and integrates with PostgreSQL and Qdrant.
+This repository contains a high-performance, production-ready URL Shortener designed to leverage native AWS services for maximum scale, resilience, and minimal latency. The application is built using FastAPI on Python 3.11 and integrates with AWS DynamoDB for fast key-value lookups.
 
 ## Project Structure
 
@@ -32,19 +32,17 @@ aws-url-shortener/
 ## Technology Stack
 
 - **Backend Framework**: FastAPI (Python 3.11)
-- **Database**: PostgreSQL (Relational metadata mapping)
-- **Vector Database**: Qdrant (Semantic search/mapping)
-- **State Management**: LangGraph (Dynamic flow and orchestrations)
+- **Database**: AWS DynamoDB (for low-latency, scalable key-value storage)
 - **Infrastructure as Code**: AWS CloudFormation (Automation templates)
+- **Compute / Hosting**: AWS App Runner / AWS ECS Fargate
 
 ## Getting Started
 
 ### Prerequisites
 
 - Python 3.11+
-- PostgreSQL
-- Qdrant Instance
-- AWS CLI configured with appropriate permissions
+- AWS CLI configured with appropriate credentials/permissions
+- Local DynamoDB (optional, for local development testing)
 
 ### Local Environment Setup
 
@@ -67,9 +65,8 @@ aws-url-shortener/
 
 4. Configure environment variables in a `.env` file at the root:
    ```env
-   DATABASE_URL=postgresql://user:password@localhost:5420/dbname
-   QDRANT_HOST=localhost
-   QDRANT_PORT=6333
+   DYNAMODB_TABLE=url-shortener-table
+   AWS_REGION=us-east-1
    ```
 
 5. Run the development server:
@@ -80,7 +77,7 @@ aws-url-shortener/
 ## Deployment on AWS
 
 Refer to the `aws/` directory for cloud-native deployment details:
-- **`aws/cloudformation/`**: Contains CloudFormation templates for deploying AWS resources (ECS/Fargate, RDS PostgreSQL, App Runner, etc.).
+- **`aws/cloudformation/`**: Contains CloudFormation templates for deploying AWS resources (DynamoDB Table, ECS/Fargate, App Runner, IAM Roles).
 - **`aws/scripts/`**: Automation scripts to streamline deployments, migrations, and environment configuration.
 
 ## License

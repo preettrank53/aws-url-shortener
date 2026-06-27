@@ -113,3 +113,7 @@ env/
 # Local env files
 .env
 .env.*
+
+# Project resource IDs
+aws/aws-resource-ids.txt
+
