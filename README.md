@@ -80,6 +80,33 @@ Refer to the `aws/` directory for cloud-native deployment details:
 - **`aws/cloudformation/`**: Contains CloudFormation templates for deploying AWS resources (DynamoDB Table, ECS/Fargate, App Runner, IAM Roles).
 - **`aws/scripts/`**: Automation scripts to streamline deployments, migrations, and environment configuration.
 
+## Development Roadmap
+
+This project is implemented in structured phases to establish architecture, configure storage, develop the service layer, and automate cloud deployment.
+
+### Phase 1: Foundation and S3 Static Hosting (Completed)
+- Establish project workspace and directory layout.
+- Configure version control guidelines and gitignore.
+- Create static frontend placeholder for verification.
+- Set up S3 Static Hosting and configure logs/bucket parameters.
+
+### Phase 2: Security Groups and Database Provisioning (Completed)
+- Define and provision Security Groups (sg-load-balancer, sg-ec2-app, sg-rds-database).
+- Establish traffic flow constraints (RDS limited to EC2 security group, EC2 accessible via ALB).
+- Provision RDS MySQL instance for permanent relational metadata.
+- Provision DynamoDB tables (url-cache, click-analytics) for rapid caching and click tracing.
+- Document system schema in database-schema.md.
+
+### Phase 3: Application Development (In Progress)
+- Implement backend URL shortening service using FastAPI.
+- Integrate DynamoDB client logic for low-latency redirections.
+- Integrate MySQL DB operations for analytical aggregation.
+
+### Phase 4: EC2 and Load Balancer Deployment (Pending)
+- Deploy Application Load Balancer and configure target groups.
+- Set up EC2 instances within security constraints.
+- Automate configuration with startup scripts.
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
