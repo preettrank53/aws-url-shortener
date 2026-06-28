@@ -80,6 +80,20 @@ Refer to the `aws/` directory for cloud-native deployment details:
 - **`aws/cloudformation/`**: Contains CloudFormation templates for deploying AWS resources (DynamoDB Table, ECS/Fargate, App Runner, IAM Roles).
 - **`aws/scripts/`**: Automation scripts to streamline deployments, migrations, and environment configuration.
 
+## Live Demo
+
+http://54.82.89.28
+
+## Development Status
+
+- [x] Day 1: Foundation Setup
+- [x] Day 2: Database Layer  
+- [x] Day 3: Application Development
+- [x] Day 4: EC2 Deployment
+- [ ] Day 5: Lambda + S3 Integration
+- [ ] Day 6: Load Balancer + Auto Scaling
+- [ ] Day 7: Testing + Documentation
+
 ## Development Roadmap
 
 This project is implemented in structured phases to establish architecture, configure storage, develop the service layer, and automate cloud deployment.
@@ -97,15 +111,16 @@ This project is implemented in structured phases to establish architecture, conf
 - Provision DynamoDB tables (url-cache, click-analytics) for rapid caching and click tracing.
 - Document system schema in database-schema.md.
 
-### Phase 3: Application Development (In Progress)
-- Implement backend URL shortening service using FastAPI.
+### Phase 3: Application Development (Completed)
+- Implement backend URL shortening service using Flask.
 - Integrate DynamoDB client logic for low-latency redirections.
 - Integrate MySQL DB operations for analytical aggregation.
 
-### Phase 4: EC2 and Load Balancer Deployment (Pending)
-- Deploy Application Load Balancer and configure target groups.
-- Set up EC2 instances within security constraints.
-- Automate configuration with startup scripts.
+### Phase 4: EC2 and Load Balancer Deployment (Completed)
+- Deploy and configure Nginx web server as reverse proxy.
+- Deploy Application code on EC2.
+- Configure Gunicorn production application server.
+- Set up systemd service for automated application lifecycle.
 
 ## License
 
