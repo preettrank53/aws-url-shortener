@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - AWS URL Shortener</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="glow-orb" id="orb1"></div>
+    <div class="glow-orb" id="orb2"></div>
+
+    <div class="container">
+        <!-- Navigation Header -->
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-chart-pie logo-icon"></i>
+                <span class="logo-text">Link Analytics Dashboard</span>
+            </div>
+            <nav>
+                <a href="{{ url_for('index') }}" class="nav-btn"><i class="fa-solid fa-house"></i> Home</a>
+            </nav>
+        </header>
+
+        <!-- Analytics Overview Stats -->
+        <section class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-link"></i></div>
+                <div class="stat-info">
+                    <h3>Total Shortened URLs</h3>
+                    <p class="stat-val">{{ urls|length }}</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon icon-orange"><i class="fa-solid fa-arrow-pointer"></i></div>
+                <div class="stat-info">
+                    <h3>Accumulated Clicks</h3>
+                    <p class="stat-val">
+                        {% set total_clicks = namespace(value=0) %}
+                        {% for item in urls %}
+                            {% set total_clicks.value = total_clicks.value + item.total_clicks %}
+                        {% endfor %}
+                        {{ total_clicks.value }}
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Links Table -->
+        <section class="dashboard-table-section">
+            <h2>All Active Link Mappings</h2>
+            <div class="table-container">
+                {% if urls %}
+                    <table class="recent-table">
+                        <thead>
+                            <tr>
+                                <th>Original Destination</th>
+                                <th>Short Link</th>
+                                <th>Creation Date</th>
+                                <th>Total Clicks</th>
+                                <th>Copy Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in urls %}
+                                <tr>
+                                    <td class="url-cell" title="{{ item.original_url }}">{{ item.original_url }}</td>
+                                    <td>
+                                        <a href="{{ base_url.rstrip('/') }}/{{ item.short_code }}" target="_blank" class="short-link">
+                                            {{ base_url.rstrip('/') }}/{{ item.short_code }}
+                                        </a>
+                                    </td>
+                                    <td>{{ item.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                    <td><span class="badge badge-clicks">{{ item.total_clicks }}</span></td>
+                                    <td>
+                                        <button class="action-btn" onclick="copyText('{{ base_url.rstrip('/') }}/{{ item.short_code }}', this)">
+                                            <i class="fa-regular fa-copy"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="no-data">
+                        <i class="fa-solid fa-folder-open"></i>
+                        <p>No analytics data available. Create some short links on the home page first!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

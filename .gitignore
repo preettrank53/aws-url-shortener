@@ -117,3 +117,7 @@ env/
 # Project resource IDs
 aws/aws-resource-ids.txt
 
+# Day 3 specific ignores
+app/__pycache__/
+
+

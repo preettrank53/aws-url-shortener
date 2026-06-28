@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS URL Shortener - Create Short Links</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="glow-orb" id="orb1"></div>
+    <div class="glow-orb" id="orb2"></div>
+
+    <div class="container">
+        <!-- Navigation Header -->
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-link logo-icon"></i>
+                <span class="logo-text">AWS URL Shortener</span>
+            </div>
+            <nav>
+                <a href="{{ url_for('dashboard') }}" class="nav-btn"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            </nav>
+        </header>
+
+        <!-- Main Card -->
+        <main class="main-card">
+            <h1>Scale Your Links Instantly</h1>
+            <p class="subtitle">A production-grade, highly-available URL shortener built on AWS with DynamoDB and RDS MySQL.</p>
+
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(category_filter=["error"]) %}
+                {% if messages %}
+                    <div class="alert alert-error">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <!-- Shorten Form -->
+            <form action="{{ url_for('shorten') }}" method="POST" class="shorten-form" id="shortenForm">
+                <div class="input-group">
+                    <i class="fa-solid fa-globe input-icon"></i>
+                    <input type="url" name="original_url" id="originalUrl" placeholder="Paste a long link here (e.g., https://aws.amazon.com/...)" required>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span>Shorten</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+
+            <!-- Result Section -->
+            {% if shortened_url %}
+                <div class="result-card">
+                    <h3>Your Short Link is Ready</h3>
+                    <div class="result-box">
+                        <input type="text" id="shortenedUrl" value="{{ shortened_url }}" readonly>
+                        <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()">
+                            <i class="fa-regular fa-copy"></i> Copy
+                        </button>
+                    </div>
+                    <p class="original-link-preview">Target: <a href="{{ original_url }}" target="_blank">{{ original_url }}</a></p>
+                </div>
+            {% endif %}
+        </main>
+
+        <!-- Recent Links Section -->
+        <section class="recent-section">
+            <h2>Recent Links</h2>
+            <div class="table-container">
+                {% if recent_urls %}
+                    <table class="recent-table">
+                        <thead>
+                            <tr>
+                                <th>Original URL</th>
+                                <th>Short URL</th>
+                                <th>Created</th>
+                                <th>Clicks</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in recent_urls %}
+                                <tr>
+                                    <td class="url-cell" title="{{ item.original_url }}">{{ item.original_url }}</td>
+                                    <td>
+                                        <a href="{{ base_url.rstrip('/') }}/{{ item.short_code }}" target="_blank" class="short-link">
+                                            {{ base_url.rstrip('/') }}/{{ item.short_code }}
+                                        </a>
+                                    </td>
+                                    <td>{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td><span class="badge badge-clicks">{{ item.total_clicks }}</span></td>
+                                    <td>
+                                        <button class="action-btn" onclick="copyText('{{ base_url.rstrip('/') }}/{{ item.short_code }}', this)">
+                                            <i class="fa-regular fa-copy"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="no-data">
+                        <i class="fa-solid fa-link-slash"></i>
+                        <p>No links shortened yet. Paste a link above to get started!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
